@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Query</title>
+</head>
+<body>
+    <h1>Query LLM</h1>
+    <form id="queryForm">
+        <label for="message">Enter your query:</label><br>
+        <input type="text" id="message" name="message"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('queryForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const message = document.getElementById('message').value;
+            const responseDiv = document.getElementById('response');
+
+            const response = await fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            const data = await response.json();
+            responseDiv.innerHTML = `<h2>Response:</h2><p>${data.response || data.error}</p>`;
+        };
+    </script>
+</body>
+</html>
